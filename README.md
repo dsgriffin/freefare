@@ -4,7 +4,7 @@
 
 Rust bindings for the [libfreefare](https://github.com/nfc-tools/libfreefare) library.
 
-For raw FFI bindings for `libfreefare`, see [nfc-sys](https://github.com/dsgriffin/freefare-sys).
+For raw FFI bindings for `libfreefare`, see [freefare-sys](https://github.com/dsgriffin/freefare-sys).
 
 ## Installation
 
