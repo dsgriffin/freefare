@@ -1,0 +1,1 @@
+{"rustc":4800977194715079467,"target":5427994736970816660,"profile":15288148974678605576,"local":{"variant":"Precalculated","fields":["0.1.0"]},"features":"None","deps":[["libc v0.2.12",375091742639993764],["nfc-sys v0.1.3",6648492735401910287]],"rustflags":[]}
