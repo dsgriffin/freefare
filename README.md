@@ -16,7 +16,7 @@ Then install `libfreefare` ([on Debian/Ubuntu](https://github.com/nfc-tools/libf
 
     [dependencies]
     libc = "0.2.0"
-    freefare = "0.1.0"
+    freefare = "0.1.1"
     
 ## Example Usage
 
@@ -27,6 +27,7 @@ Then install `libfreefare` ([on Debian/Ubuntu](https://github.com/nfc-tools/libf
 * Replace any raw pointers
 * Provide examples
 * Documentation
+* Test
   
 ## Contributing
     
