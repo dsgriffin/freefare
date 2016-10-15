@@ -14,25 +14,27 @@ Then install `libfreefare` ([on Debian/Ubuntu](https://github.com/nfc-tools/libf
 
 ### Cargo.toml
 
-    [dependencies]
-    libc = "0.2.0"
-    freefare = "0.1.2"
-    
+```toml
+[dependencies]
+libc = "0.2.0"
+freefare = "0.1.2"
+```
+
 ## Example Usage
 
   -
-    
+
 ## TODO
 
 * Replace any raw pointers
 * Provide examples
 * Documentation
 * Test
-  
+
 ## Contributing
-    
-I'm brand new to Rust so any help or constructive information would be really appreciated. Thanks in advance!    
-    
+
+I'm brand new to Rust so any help or constructive information would be really appreciated. Thanks in advance!
+
 ## License
-    
-MIT    
+
+MIT
