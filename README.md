@@ -17,7 +17,7 @@ Then install `libfreefare` ([on Debian/Ubuntu](https://github.com/nfc-tools/libf
 ```toml
 [dependencies]
 libc = "0.2.0"
-freefare = "0.1.2"
+freefare = "0.2.0"
 ```
 
 ## Example Usage
