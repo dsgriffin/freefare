@@ -3,11 +3,11 @@
 
 extern crate libc;
 extern crate nfc_sys;
-
-pub mod ffi;
+extern crate freefare_sys;
 
 pub mod felica;
 pub mod freefare;
 pub mod mad;
 pub mod mifare;
 pub mod tlv;
+pub mod ntag21x;
