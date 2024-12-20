@@ -3,7 +3,6 @@ use ::freefare_sys;
 
 use libc::size_t;
 
-/// Safe wrapper for Felica-related functions
 pub struct Felica;
 
 impl Felica {

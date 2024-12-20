@@ -3,11 +3,10 @@ use ::freefare_sys;
 
 use std::ffi::{CStr, CString};
 
-/// Safe wrapper for Freefare-related functions
 pub struct Freefare;
 
 impl Freefare {
-    /// Retrieves the tags associated with an NFC device.
+    /// Retrieves the tags associated with an NFC device
     pub fn get_tags(device: *mut nfc_sys::nfc_device) -> Result<Vec<freefare_sys::FreefareTag>, String> {
         if device.is_null() {
             return Err("Device is null. Cannot get tags.".to_string());
@@ -32,7 +31,7 @@ impl Freefare {
         Ok(tags)
     }
 
-    /// Creates a new FreefareTag associated with the given device and NFC target.
+    /// Creates a new FreefareTag associated with the given device and NFC target
     pub fn tag_new(device: *mut nfc_sys::nfc_device, target: nfc_sys::nfc_target) -> Result<freefare_sys::FreefareTag, String> {
         if device.is_null() {
             return Err("Device is null. Cannot create new tag.".to_string());
@@ -46,7 +45,7 @@ impl Freefare {
         }
     }
 
-    /// Gets the type of the tag.
+    /// Gets the type of the tag
     pub fn get_tag_type(tag: freefare_sys::FreefareTag) -> Result<freefare_sys::Enum_freefare_tag_type, String> {
         if tag.is_null() {
             return Err("Tag is null. Cannot get tag type.".to_string());
@@ -55,7 +54,7 @@ impl Freefare {
         Ok(unsafe { freefare_sys::freefare_get_tag_type(tag) })
     }
 
-    /// Gets the friendly name of the tag.
+    /// Gets the friendly name of the tag
     pub fn get_tag_friendly_name(tag: freefare_sys::FreefareTag) -> Result<String, String> {
         if tag.is_null() {
             return Err("Tag is null. Cannot get friendly name.".to_string());
@@ -87,14 +86,14 @@ impl Freefare {
         }
     }
 
-    /// Frees a single tag.
+    /// Frees a single tag
     pub fn free_tag(tag: freefare_sys::FreefareTag) {
         if !tag.is_null() {
             unsafe { freefare_sys::freefare_free_tag(tag) };
         }
     }
 
-    /// Checks if the selected tag is present.
+    /// Checks if the selected tag is present
     pub fn selected_tag_is_present(device: *mut nfc_sys::nfc_device) -> bool {
         if device.is_null() {
             false
@@ -103,7 +102,7 @@ impl Freefare {
         }
     }
 
-    /// Gets the last error message for a tag.
+    /// Gets the last error message for a tag
     pub fn strerror(tag: freefare_sys::FreefareTag) -> Result<String, String> {
         if tag.is_null() {
             return Err("Tag is null. Cannot get error string.".to_string());
@@ -117,7 +116,7 @@ impl Freefare {
         }
     }
 
-    /// Writes an error string to a provided buffer.
+    /// Writes an error string to a provided buffer
     pub fn strerror_r(tag: freefare_sys::FreefareTag, buffer: &mut [u8]) -> Result<(), String> {
         if tag.is_null() {
             return Err("Tag is null. Cannot write error string.".to_string());
@@ -134,7 +133,7 @@ impl Freefare {
         }
     }
 
-    /// Prints an error message associated with a tag and a custom string.
+    /// Prints an error message associated with a tag and a custom string
     pub fn perror(tag: freefare_sys::FreefareTag, message: &str) {
         if tag.is_null() {
             eprintln!("Cannot print error for null tag.");
