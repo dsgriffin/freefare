@@ -93,6 +93,19 @@ impl Freefare {
         }
     }
 
+    /// Frees the memory allocated for a list of tags
+    pub fn free_tags(tags: *mut freefare_sys::FreefareTag) -> Result<(), String> {
+        if tags.is_null() {
+            return Err("Tags pointer is null. Nothing to free.".to_string());
+        }
+
+        unsafe {
+            freefare_sys::freefare_free_tags(tags);
+        }
+
+        Ok(())
+    }
+
     /// Checks if the selected tag is present
     pub fn selected_tag_is_present(device: *mut nfc_sys::nfc_device) -> bool {
         if device.is_null() {
