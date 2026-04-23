@@ -1,20 +1,21 @@
-use ::nfc_sys;
+use crate::{check_status, copy_c_string, copy_malloc_c_string, Error, Result};
 use ::freefare_sys;
+use ::nfc_sys;
+use std::ffi::CString;
 
-use std::ffi::{CStr, CString};
-
+/// Namespace for general libfreefare tag-management helpers.
 pub struct Freefare;
 
 impl Freefare {
     /// Retrieves the tags associated with an NFC device
-    pub fn get_tags(device: *mut nfc_sys::nfc_device) -> Result<Vec<freefare_sys::FreefareTag>, String> {
+    pub fn get_tags(device: *mut nfc_sys::nfc_device) -> Result<Vec<freefare_sys::FreefareTag>> {
         if device.is_null() {
-            return Err("Device is null. Cannot get tags.".to_string());
+            return Err(Error::new("Device is null. Cannot get tags."));
         }
 
         let raw_tags = unsafe { freefare_sys::freefare_get_tags(device) };
         if raw_tags.is_null() {
-            return Err("No tags found.".to_string());
+            return Err(Error::new("No tags found."));
         }
 
         let mut tags = Vec::new();
@@ -32,57 +33,56 @@ impl Freefare {
     }
 
     /// Creates a new FreefareTag associated with the given device and NFC target
-    pub fn tag_new(device: *mut nfc_sys::nfc_device, target: nfc_sys::nfc_target) -> Result<freefare_sys::FreefareTag, String> {
+    pub fn tag_new(
+        device: *mut nfc_sys::nfc_device,
+        target: nfc_sys::nfc_iso14443a_info,
+    ) -> Result<freefare_sys::FreefareTag> {
         if device.is_null() {
-            return Err("Device is null. Cannot create new tag.".to_string());
+            return Err(Error::new("Device is null. Cannot create new tag."));
         }
 
         let tag = unsafe { freefare_sys::freefare_tag_new(device, target) };
         if tag.is_null() {
-            Err("Failed to create new tag.".to_string())
+            Err(Error::new("Failed to create new tag."))
         } else {
             Ok(tag)
         }
     }
 
     /// Gets the type of the tag
-    pub fn get_tag_type(tag: freefare_sys::FreefareTag) -> Result<freefare_sys::Enum_freefare_tag_type, String> {
+    pub fn get_tag_type(tag: freefare_sys::FreefareTag) -> Result<freefare_sys::FreefareTagType> {
         if tag.is_null() {
-            return Err("Tag is null. Cannot get tag type.".to_string());
+            return Err(Error::new("Tag is null. Cannot get tag type."));
         }
 
         Ok(unsafe { freefare_sys::freefare_get_tag_type(tag) })
     }
 
     /// Gets the friendly name of the tag
-    pub fn get_tag_friendly_name(tag: freefare_sys::FreefareTag) -> Result<String, String> {
+    pub fn get_tag_friendly_name(tag: freefare_sys::FreefareTag) -> Result<String> {
         if tag.is_null() {
-            return Err("Tag is null. Cannot get friendly name.".to_string());
+            return Err(Error::new("Tag is null. Cannot get friendly name."));
         }
 
         let name_ptr = unsafe { freefare_sys::freefare_get_tag_friendly_name(tag) };
         if name_ptr.is_null() {
-            Err("Failed to get tag friendly name.".to_string())
+            Err(Error::new("Failed to get tag friendly name."))
         } else {
-            Ok(unsafe { CStr::from_ptr(name_ptr) }.to_string_lossy().into_owned())
+            Ok(copy_c_string(name_ptr))
         }
     }
 
     /// Gets the UID of the tag
-    pub fn get_tag_uid(tag: freefare_sys::FreefareTag) -> Result<String, String> {
+    pub fn get_tag_uid(tag: freefare_sys::FreefareTag) -> Result<String> {
         if tag.is_null() {
-            return Err("Tag is null. Cannot get UID.".to_string());
+            return Err(Error::new("Tag is null. Cannot get UID."));
         }
 
         let uid_ptr = unsafe { freefare_sys::freefare_get_tag_uid(tag) };
         if uid_ptr.is_null() {
-            Err("Failed to get tag UID.".to_string())
+            Err(Error::new("Failed to get tag UID."))
         } else {
-            let uid = unsafe { CStr::from_ptr(uid_ptr) }.to_string_lossy().into_owned();
-
-            unsafe { freefare_sys::freefare_free_tag(uid_ptr as *mut _) };
-
-            Ok(uid)
+            copy_malloc_c_string(uid_ptr)
         }
     }
 
@@ -94,9 +94,9 @@ impl Freefare {
     }
 
     /// Frees the memory allocated for a list of tags
-    pub fn free_tags(tags: *mut freefare_sys::FreefareTag) -> Result<(), String> {
+    pub fn free_tags(tags: *mut freefare_sys::FreefareTag) -> Result<()> {
         if tags.is_null() {
-            return Err("Tags pointer is null. Nothing to free.".to_string());
+            return Err(Error::new("Tags pointer is null. Nothing to free."));
         }
 
         unsafe {
@@ -106,44 +106,31 @@ impl Freefare {
         Ok(())
     }
 
-    /// Checks if the selected tag is present
-    pub fn selected_tag_is_present(device: *mut nfc_sys::nfc_device) -> bool {
-        if device.is_null() {
-            false
-        } else {
-            unsafe { freefare_sys::freefare_selected_tag_is_present(device) != 0 }
-        }
-    }
-
     /// Gets the last error message for a tag
-    pub fn strerror(tag: freefare_sys::FreefareTag) -> Result<String, String> {
+    pub fn strerror(tag: freefare_sys::FreefareTag) -> Result<String> {
         if tag.is_null() {
-            return Err("Tag is null. Cannot get error string.".to_string());
+            return Err(Error::new("Tag is null. Cannot get error string."));
         }
 
         let err_ptr = unsafe { freefare_sys::freefare_strerror(tag) };
         if err_ptr.is_null() {
-            Err("No error message available.".to_string())
+            Err(Error::new("No error message available."))
         } else {
-            Ok(unsafe { CStr::from_ptr(err_ptr) }.to_string_lossy().into_owned())
+            Ok(copy_c_string(err_ptr))
         }
     }
 
     /// Writes an error string to a provided buffer
-    pub fn strerror_r(tag: freefare_sys::FreefareTag, buffer: &mut [u8]) -> Result<(), String> {
+    pub fn strerror_r(tag: freefare_sys::FreefareTag, buffer: &mut [u8]) -> Result<()> {
         if tag.is_null() {
-            return Err("Tag is null. Cannot write error string.".to_string());
+            return Err(Error::new("Tag is null. Cannot write error string."));
         }
 
         let result = unsafe {
             freefare_sys::freefare_strerror_r(tag, buffer.as_mut_ptr() as *mut _, buffer.len())
         };
 
-        if result < 0 {
-            Err("Failed to write error string to buffer.".to_string())
-        } else {
-            Ok(())
-        }
+        check_status(tag, result, "Failed to write error string to buffer.")
     }
 
     /// Prints an error message associated with a tag and a custom string
@@ -153,7 +140,8 @@ impl Freefare {
             return;
         }
 
-        let c_message = CString::new(message).unwrap_or_else(|_| CString::new("Invalid message").unwrap());
+        let c_message =
+            CString::new(message).unwrap_or_else(|_| CString::new("Invalid message").unwrap());
         unsafe { freefare_sys::freefare_perror(tag, c_message.as_ptr()) };
     }
 }

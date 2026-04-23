@@ -1,16 +1,21 @@
 [package]
 name = "freefare"
-version = "0.3.0"
+version = "1.0.0"
 authors = ["Daniel Griffin <mail@dsgriffin.com>"]
-description = "Rust bindings for the libfreefare library"
-documentation = "https://github.com/dsgriffin/freefare"
+description = "High-level Rust bindings for the libfreefare library"
+documentation = "https://docs.rs/freefare"
 homepage = "https://github.com/dsgriffin/freefare"
 repository = "https://github.com/dsgriffin/freefare"
 readme = "README.md"
-keywords = ["device", "communication", "nfc"]
+keywords = ["device", "communication", "nfc", "mifare", "freefare"]
+categories = ["api-bindings", "hardware-support"]
 license = "MIT"
+edition = "2018"
+
+[package.metadata.docs.rs]
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-libc = "0.2.0"
-nfc-sys = "0.1.5"
-freefare-sys = "0.2.1"
+libc = "0.2"
+nfc-sys = "1.0.0"
+freefare-sys = "1.0.0"
