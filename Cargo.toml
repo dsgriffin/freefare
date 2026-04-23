@@ -1,6 +1,6 @@
 [package]
 name = "freefare"
-version = "1.0.0"
+version = "1.1.0"
 authors = ["Daniel Griffin <mail@dsgriffin.com>"]
 description = "High-level Rust bindings for the libfreefare library"
 documentation = "https://docs.rs/freefare"
@@ -17,5 +17,6 @@ rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 libc = "0.2"
+nfc = "1.0.0"
 nfc-sys = "1.0.0"
 freefare-sys = "1.0.0"

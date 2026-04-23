@@ -1,3 +1,5 @@
+#![allow(clippy::missing_safety_doc)]
+
 use crate::{check_status, copy_malloc_array, copy_malloc_c_string, Error, Result};
 use ::freefare_sys;
 use ::nfc_sys;
@@ -8,7 +10,7 @@ pub struct Mifare;
 
 impl Mifare {
     /// Connects to a Mifare Ultralight tag
-    pub fn ultralight_connect(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn ultralight_connect(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new(
                 "Tag is null. Cannot connect to Mifare Ultralight tag.",
@@ -24,7 +26,7 @@ impl Mifare {
     }
 
     /// Disconnects from a Mifare Ultralight tag.
-    pub fn ultralight_disconnect(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn ultralight_disconnect(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new(
                 "Tag is null. Cannot disconnect from Mifare Ultralight tag.",
@@ -42,7 +44,7 @@ impl Mifare {
     }
 
     /// Reads data from a page of a Mifare Ultralight tag.
-    pub fn ultralight_read(
+    pub unsafe fn ultralight_read(
         tag: freefare_sys::FreefareTag,
         page: freefare_sys::MifareUltralightPageNumber,
         buffer: &mut freefare_sys::MifareUltralightPage,
@@ -62,7 +64,7 @@ impl Mifare {
     }
 
     /// Writes data to a page of a Mifare Ultralight tag.
-    pub fn ultralight_write(
+    pub unsafe fn ultralight_write(
         tag: freefare_sys::FreefareTag,
         page: freefare_sys::MifareUltralightPageNumber,
         data: &freefare_sys::MifareUltralightPage,
@@ -82,7 +84,7 @@ impl Mifare {
     }
 
     /// Authenticates a Mifare Ultralight C tag using a DESFire key.
-    pub fn ultralightc_authenticate(
+    pub unsafe fn ultralightc_authenticate(
         tag: freefare_sys::FreefareTag,
         key: freefare_sys::MifareDESFireKey,
     ) -> Result<()> {
@@ -109,7 +111,7 @@ impl Mifare {
     }
 
     /// Checks if a Mifare Ultralight C tag is present on the NFC reader.
-    pub fn is_mifare_ultralightc_on_reader(
+    pub unsafe fn is_mifare_ultralightc_on_reader(
         device: *mut nfc_sys::nfc_device,
         nai: nfc_sys::nfc_iso14443a_info,
     ) -> bool {
@@ -121,7 +123,7 @@ impl Mifare {
     }
 
     /// Connects to a Mifare Classic tag.
-    pub fn classic_connect(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn classic_connect(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new(
                 "Tag is null. Cannot connect to Mifare Classic tag.",
@@ -137,7 +139,7 @@ impl Mifare {
     }
 
     /// Disconnects from a Mifare Classic tag.
-    pub fn classic_disconnect(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn classic_disconnect(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new(
                 "Tag is null. Cannot disconnect from Mifare Classic tag.",
@@ -153,7 +155,7 @@ impl Mifare {
     }
 
     /// Authenticates a Mifare Classic block using a specified key and key type.
-    pub fn classic_authenticate(
+    pub unsafe fn classic_authenticate(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         key: &freefare_sys::MifareClassicKey,
@@ -176,7 +178,7 @@ impl Mifare {
     }
 
     /// Reads data from a Mifare Classic block.
-    pub fn classic_read(
+    pub unsafe fn classic_read(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         buffer: &mut freefare_sys::MifareClassicBlock,
@@ -196,7 +198,7 @@ impl Mifare {
     }
 
     /// Initializes a Mifare Classic block as a value block.
-    pub fn classic_init_value(
+    pub unsafe fn classic_init_value(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         value: i32,
@@ -217,7 +219,7 @@ impl Mifare {
     }
 
     /// Reads a value from a Mifare Classic block.
-    pub fn classic_read_value(
+    pub unsafe fn classic_read_value(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
     ) -> Result<(i32, freefare_sys::MifareClassicBlockNumber)> {
@@ -243,7 +245,7 @@ impl Mifare {
     }
 
     /// Writes data to a Mifare Classic block.
-    pub fn classic_write(
+    pub unsafe fn classic_write(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         data: &freefare_sys::MifareClassicBlock,
@@ -263,7 +265,7 @@ impl Mifare {
     }
 
     /// Increments a value in a Mifare Classic block.
-    pub fn classic_increment(
+    pub unsafe fn classic_increment(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         amount: u32,
@@ -283,7 +285,7 @@ impl Mifare {
     }
 
     /// Decrements a value in a Mifare Classic block.
-    pub fn classic_decrement(
+    pub unsafe fn classic_decrement(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         amount: u32,
@@ -303,7 +305,7 @@ impl Mifare {
     }
 
     /// Restores a value from a Mifare Classic block.
-    pub fn classic_restore(
+    pub unsafe fn classic_restore(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
     ) -> Result<()> {
@@ -322,7 +324,7 @@ impl Mifare {
     }
 
     /// Transfers a value to a Mifare Classic block.
-    pub fn classic_transfer(
+    pub unsafe fn classic_transfer(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
     ) -> Result<()> {
@@ -341,7 +343,7 @@ impl Mifare {
     }
 
     /// Gets permissions for a trailer block in a Mifare Classic tag.
-    pub fn classic_get_trailer_block_permission(
+    pub unsafe fn classic_get_trailer_block_permission(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         permission: u16,
@@ -366,7 +368,7 @@ impl Mifare {
     }
 
     /// Formats a sector of a Mifare Classic tag.
-    pub fn classic_format_sector(
+    pub unsafe fn classic_format_sector(
         tag: freefare_sys::FreefareTag,
         sector: freefare_sys::MifareClassicSectorNumber,
     ) -> Result<()> {
@@ -383,6 +385,7 @@ impl Mifare {
     }
 
     /// Creates a trailer block for a Mifare Classic tag.
+    #[allow(clippy::too_many_arguments)]
     pub fn classic_trailer_block(
         block: &mut freefare_sys::MifareClassicBlock,
         key_a: &freefare_sys::MifareClassicKey,
@@ -408,7 +411,7 @@ impl Mifare {
     }
 
     /// Gets permissions for a data block in a Mifare Classic tag.
-    pub fn classic_get_data_block_permission(
+    pub unsafe fn classic_get_data_block_permission(
         tag: freefare_sys::FreefareTag,
         block: freefare_sys::MifareClassicBlockNumber,
         permission: u8,
@@ -457,7 +460,7 @@ impl Mifare {
     }
 
     /// Reads application data from a Mifare Classic tag.
-    pub fn application_read(
+    pub unsafe fn application_read(
         tag: freefare_sys::FreefareTag,
         mad: freefare_sys::Mad,
         aid: freefare_sys::MadAid,
@@ -491,7 +494,7 @@ impl Mifare {
     }
 
     /// Writes application data to a Mifare Classic tag.
-    pub fn application_write(
+    pub unsafe fn application_write(
         tag: freefare_sys::FreefareTag,
         mad: freefare_sys::Mad,
         aid: freefare_sys::MadAid,
@@ -525,7 +528,10 @@ impl Mifare {
     }
 
     /// Frees an application in a Mifare Classic tag.
-    pub fn application_free(mad: freefare_sys::Mad, aid: freefare_sys::MadAid) -> Result<()> {
+    pub unsafe fn application_free(
+        mad: freefare_sys::Mad,
+        aid: freefare_sys::MadAid,
+    ) -> Result<()> {
         if mad.is_null() {
             return Err(Error::new(
                 "MAD structure is null. Cannot free application.",
@@ -542,7 +548,7 @@ impl Mifare {
     }
 
     /// Creates a new Mifare DESFire AID with MAD AID.
-    pub fn desfire_aid_new_with_mad_aid(
+    pub unsafe fn desfire_aid_new_with_mad_aid(
         mad_aid: freefare_sys::MadAid,
         n: u8,
     ) -> freefare_sys::MifareDESFireAID {
@@ -550,12 +556,12 @@ impl Mifare {
     }
 
     /// Gets the AID value from a Mifare DESFire AID.
-    pub fn desfire_aid_get_aid(aid: freefare_sys::MifareDESFireAID) -> u32 {
+    pub unsafe fn desfire_aid_get_aid(aid: freefare_sys::MifareDESFireAID) -> u32 {
         unsafe { freefare_sys::mifare_desfire_aid_get_aid(aid) }
     }
 
     /// Gets the last PCD error from a Mifare DESFire tag.
-    pub fn desfire_last_pcd_error(tag: freefare_sys::FreefareTag) -> Result<u8> {
+    pub unsafe fn desfire_last_pcd_error(tag: freefare_sys::FreefareTag) -> Result<u8> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve last PCD error."));
         }
@@ -564,7 +570,7 @@ impl Mifare {
     }
 
     /// Gets the last PICC error from a Mifare DESFire tag.
-    pub fn desfire_last_picc_error(tag: freefare_sys::FreefareTag) -> Result<u8> {
+    pub unsafe fn desfire_last_picc_error(tag: freefare_sys::FreefareTag) -> Result<u8> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve last PICC error."));
         }
@@ -573,7 +579,7 @@ impl Mifare {
     }
 
     /// Connects to a Mifare DESFire tag.
-    pub fn desfire_connect(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn desfire_connect(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new(
                 "Tag is null. Cannot connect to Mifare DESFire tag.",
@@ -589,7 +595,7 @@ impl Mifare {
     }
 
     /// Disconnects from a Mifare DESFire tag.
-    pub fn desfire_disconnect(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn desfire_disconnect(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new(
                 "Tag is null. Cannot disconnect from Mifare DESFire tag.",
@@ -605,7 +611,7 @@ impl Mifare {
     }
 
     /// Authenticates with a Mifare DESFire tag using a key.
-    pub fn desfire_authenticate(
+    pub unsafe fn desfire_authenticate(
         tag: freefare_sys::FreefareTag,
         key_no: u8,
         key: freefare_sys::MifareDESFireKey,
@@ -633,7 +639,7 @@ impl Mifare {
     }
 
     /// Authenticates with a Mifare DESFire tag using ISO authentication.
-    pub fn desfire_authenticate_iso(
+    pub unsafe fn desfire_authenticate_iso(
         tag: freefare_sys::FreefareTag,
         key_no: u8,
         key: freefare_sys::MifareDESFireKey,
@@ -661,7 +667,7 @@ impl Mifare {
     }
 
     /// Authenticates with a Mifare DESFire tag using AES.
-    pub fn desfire_authenticate_aes(
+    pub unsafe fn desfire_authenticate_aes(
         tag: freefare_sys::FreefareTag,
         key_no: u8,
         key: freefare_sys::MifareDESFireKey,
@@ -687,7 +693,10 @@ impl Mifare {
     }
 
     /// Changes the key settings of a Mifare DESFire tag.
-    pub fn desfire_change_key_settings(tag: freefare_sys::FreefareTag, settings: u8) -> Result<()> {
+    pub unsafe fn desfire_change_key_settings(
+        tag: freefare_sys::FreefareTag,
+        settings: u8,
+    ) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot change key settings."));
         }
@@ -701,7 +710,7 @@ impl Mifare {
     }
 
     /// Retrieves the key settings of a Mifare DESFire tag.
-    pub fn desfire_get_key_settings(tag: freefare_sys::FreefareTag) -> Result<(u8, u8)> {
+    pub unsafe fn desfire_get_key_settings(tag: freefare_sys::FreefareTag) -> Result<(u8, u8)> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve key settings."));
         }
@@ -725,7 +734,7 @@ impl Mifare {
     }
 
     /// Changes a key on a Mifare DESFire tag.
-    pub fn desfire_change_key(
+    pub unsafe fn desfire_change_key(
         tag: freefare_sys::FreefareTag,
         key_no: u8,
         new_key: freefare_sys::MifareDESFireKey,
@@ -746,7 +755,10 @@ impl Mifare {
     }
 
     /// Retrieves the version of a key on a Mifare DESFire tag.
-    pub fn desfire_get_key_version(tag: freefare_sys::FreefareTag, key_no: u8) -> Result<u8> {
+    pub unsafe fn desfire_get_key_version(
+        tag: freefare_sys::FreefareTag,
+        key_no: u8,
+    ) -> Result<u8> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve key version."));
         }
@@ -765,7 +777,7 @@ impl Mifare {
     }
 
     /// Creates an application on a Mifare DESFire tag.
-    pub fn desfire_create_application(
+    pub unsafe fn desfire_create_application(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
         settings: u8,
@@ -786,7 +798,7 @@ impl Mifare {
     }
 
     /// Deletes an application on a Mifare DESFire tag.
-    pub fn desfire_delete_application(
+    pub unsafe fn desfire_delete_application(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
     ) -> Result<()> {
@@ -804,7 +816,7 @@ impl Mifare {
     }
 
     /// Retrieves the application IDs on a Mifare DESFire tag.
-    pub fn desfire_get_application_ids(
+    pub unsafe fn desfire_get_application_ids(
         tag: freefare_sys::FreefareTag,
     ) -> Result<Vec<freefare_sys::MifareDESFireAID>> {
         if tag.is_null() {
@@ -832,7 +844,7 @@ impl Mifare {
     }
 
     /// Creates a Mifare DESFire application with 3K3DES encryption.
-    pub fn desfire_create_application_3k3des(
+    pub unsafe fn desfire_create_application_3k3des(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
         settings: u8,
@@ -854,7 +866,7 @@ impl Mifare {
     }
 
     /// Creates a Mifare DESFire application with AES encryption.
-    pub fn desfire_create_application_aes(
+    pub unsafe fn desfire_create_application_aes(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
         settings: u8,
@@ -876,7 +888,7 @@ impl Mifare {
     }
 
     /// Creates a Mifare DESFire application with ISO parameters.
-    pub fn desfire_create_application_iso(
+    pub unsafe fn desfire_create_application_iso(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
         settings: u8,
@@ -910,7 +922,7 @@ impl Mifare {
     }
 
     /// Gets the data file names of a Mifare DESFire tag.
-    pub fn desfire_get_df_names(
+    pub unsafe fn desfire_get_df_names(
         tag: freefare_sys::FreefareTag,
     ) -> Result<Vec<freefare_sys::MifareDESFireDF>> {
         if tag.is_null() {
@@ -936,7 +948,7 @@ impl Mifare {
     }
 
     /// Selects an application on a Mifare DESFire tag.
-    pub fn desfire_select_application(
+    pub unsafe fn desfire_select_application(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
     ) -> Result<()> {
@@ -954,7 +966,7 @@ impl Mifare {
     }
 
     /// Formats the PICC of a Mifare DESFire tag.
-    pub fn desfire_format_picc(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn desfire_format_picc(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot format PICC."));
         }
@@ -969,7 +981,7 @@ impl Mifare {
     }
 
     /// Gets the version information of a Mifare DESFire tag
-    pub fn desfire_get_version(
+    pub unsafe fn desfire_get_version(
         tag: freefare_sys::FreefareTag,
     ) -> Result<freefare_sys::MifareDESFireVersionInfo> {
         if tag.is_null() {
@@ -1111,7 +1123,7 @@ impl Mifare {
     }
 
     /// Gets the version of a Mifare DESFire key
-    pub fn desfire_key_get_version(key: freefare_sys::MifareDESFireKey) -> Result<u8> {
+    pub unsafe fn desfire_key_get_version(key: freefare_sys::MifareDESFireKey) -> Result<u8> {
         if key.is_null() {
             return Err(Error::new("Key is null. Cannot get version."));
         }
@@ -1120,7 +1132,10 @@ impl Mifare {
     }
 
     /// Sets the version of a Mifare DESFire key
-    pub fn desfire_key_set_version(key: freefare_sys::MifareDESFireKey, version: u8) -> Result<()> {
+    pub unsafe fn desfire_key_set_version(
+        key: freefare_sys::MifareDESFireKey,
+        version: u8,
+    ) -> Result<()> {
         if key.is_null() {
             return Err(Error::new("Key is null. Cannot set version."));
         }
@@ -1131,7 +1146,7 @@ impl Mifare {
     }
 
     /// Frees a Mifare DESFire key.
-    pub fn desfire_key_free(key: freefare_sys::MifareDESFireKey) -> Result<()> {
+    pub unsafe fn desfire_key_free(key: freefare_sys::MifareDESFireKey) -> Result<()> {
         if key.is_null() {
             return Err(Error::new("Key is null. Cannot free key."));
         }
@@ -1142,7 +1157,7 @@ impl Mifare {
     }
 
     /// Debits an amount from a file with communication settings
-    pub fn desfire_debit_ex(
+    pub unsafe fn desfire_debit_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         amount: i32,
@@ -1162,7 +1177,7 @@ impl Mifare {
     }
 
     /// Performs a limited credit operation on a file
-    pub fn desfire_limited_credit(
+    pub unsafe fn desfire_limited_credit(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         amount: i32,
@@ -1181,7 +1196,7 @@ impl Mifare {
     }
 
     /// Performs a limited credit operation on a file with communication settings
-    pub fn desfire_limited_credit_ex(
+    pub unsafe fn desfire_limited_credit_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         amount: i32,
@@ -1204,7 +1219,7 @@ impl Mifare {
     }
 
     /// Writes a record to a file
-    pub fn desfire_write_record(
+    pub unsafe fn desfire_write_record(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -1239,7 +1254,7 @@ impl Mifare {
     }
 
     /// Writes a record to a file with communication settings
-    pub fn desfire_write_record_ex(
+    pub unsafe fn desfire_write_record_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -1278,7 +1293,7 @@ impl Mifare {
     }
 
     /// Reads records from a file
-    pub fn desfire_read_records(
+    pub unsafe fn desfire_read_records(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -1311,7 +1326,7 @@ impl Mifare {
     }
 
     /// Reads records from a file with communication settings
-    pub fn desfire_read_records_ex(
+    pub unsafe fn desfire_read_records_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -1348,7 +1363,10 @@ impl Mifare {
     }
 
     /// Clears a record file
-    pub fn desfire_clear_record_file(tag: freefare_sys::FreefareTag, file_no: u8) -> Result<()> {
+    pub unsafe fn desfire_clear_record_file(
+        tag: freefare_sys::FreefareTag,
+        file_no: u8,
+    ) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot clear record file."));
         }
@@ -1363,7 +1381,7 @@ impl Mifare {
     }
 
     /// Commits a transaction on a Mifare DESFire tag
-    pub fn desfire_commit_transaction(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn desfire_commit_transaction(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot commit transaction."));
         }
@@ -1378,7 +1396,7 @@ impl Mifare {
     }
 
     /// Aborts a transaction on a Mifare DESFire tag
-    pub fn desfire_abort_transaction(tag: freefare_sys::FreefareTag) -> Result<()> {
+    pub unsafe fn desfire_abort_transaction(tag: freefare_sys::FreefareTag) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot abort transaction."));
         }
@@ -1408,7 +1426,7 @@ impl Mifare {
     }
 
     /// Creates a linear record file with ISO parameters
-    pub fn desfire_create_linear_record_file_iso(
+    pub unsafe fn desfire_create_linear_record_file_iso(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -1443,7 +1461,7 @@ impl Mifare {
     }
 
     /// Creates a cyclic record file
-    pub fn desfire_create_cyclic_record_file(
+    pub unsafe fn desfire_create_cyclic_record_file(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -1474,7 +1492,7 @@ impl Mifare {
     }
 
     /// Deletes a file on a Mifare DESFire tag
-    pub fn desfire_delete_file(tag: freefare_sys::FreefareTag, file_no: u8) -> Result<()> {
+    pub unsafe fn desfire_delete_file(tag: freefare_sys::FreefareTag, file_no: u8) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot delete file."));
         }
@@ -1489,7 +1507,7 @@ impl Mifare {
     }
 
     /// Reads data from a file
-    pub fn desfire_read_data(
+    pub unsafe fn desfire_read_data(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -1522,7 +1540,7 @@ impl Mifare {
     }
 
     /// Writes data to a file
-    pub fn desfire_write_data(
+    pub unsafe fn desfire_write_data(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -1557,7 +1575,7 @@ impl Mifare {
     }
 
     /// Gets a value from a file
-    pub fn desfire_get_value(tag: freefare_sys::FreefareTag, file_no: u8) -> Result<i32> {
+    pub unsafe fn desfire_get_value(tag: freefare_sys::FreefareTag, file_no: u8) -> Result<i32> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot get value."));
         }
@@ -1575,7 +1593,11 @@ impl Mifare {
     }
 
     /// Credits an amount to a file
-    pub fn desfire_credit(tag: freefare_sys::FreefareTag, file_no: u8, amount: i32) -> Result<()> {
+    pub unsafe fn desfire_credit(
+        tag: freefare_sys::FreefareTag,
+        file_no: u8,
+        amount: i32,
+    ) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot credit amount."));
         }
@@ -1590,7 +1612,11 @@ impl Mifare {
     }
 
     /// Debits an amount from a file
-    pub fn desfire_debit(tag: freefare_sys::FreefareTag, file_no: u8, amount: i32) -> Result<()> {
+    pub unsafe fn desfire_debit(
+        tag: freefare_sys::FreefareTag,
+        file_no: u8,
+        amount: i32,
+    ) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot debit amount."));
         }
@@ -1605,7 +1631,7 @@ impl Mifare {
     }
 
     /// Creates a 3K3DES application with ISO parameters
-    pub fn desfire_create_application_3k3des_iso(
+    pub unsafe fn desfire_create_application_3k3des_iso(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
         settings: u8,
@@ -1643,7 +1669,7 @@ impl Mifare {
     }
 
     /// Creates an AES application with ISO parameters
-    pub fn desfire_create_application_aes_iso(
+    pub unsafe fn desfire_create_application_aes_iso(
         tag: freefare_sys::FreefareTag,
         aid: freefare_sys::MifareDESFireAID,
         settings: u8,
@@ -1681,7 +1707,9 @@ impl Mifare {
     }
 
     /// Frees a list of application IDs
-    pub fn desfire_free_application_ids(aids: *mut freefare_sys::MifareDESFireAID) -> Result<()> {
+    pub unsafe fn desfire_free_application_ids(
+        aids: *mut freefare_sys::MifareDESFireAID,
+    ) -> Result<()> {
         if aids.is_null() {
             return Err(Error::new("Application IDs are null. Cannot free."));
         }
@@ -1692,7 +1720,7 @@ impl Mifare {
     }
 
     /// Gets the amount of free memory on the tag
-    pub fn desfire_free_mem(tag: freefare_sys::FreefareTag) -> Result<u32> {
+    pub unsafe fn desfire_free_mem(tag: freefare_sys::FreefareTag) -> Result<u32> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve free memory."));
         }
@@ -1709,7 +1737,7 @@ impl Mifare {
     }
 
     /// Sets configuration options on the tag.
-    pub fn desfire_set_configuration(
+    pub unsafe fn desfire_set_configuration(
         tag: freefare_sys::FreefareTag,
         disable_format: bool,
         enable_random_uid: bool,
@@ -1730,7 +1758,7 @@ impl Mifare {
     }
 
     /// Sets the default key for the tag.
-    pub fn desfire_set_default_key(
+    pub unsafe fn desfire_set_default_key(
         tag: freefare_sys::FreefareTag,
         key: freefare_sys::MifareDESFireKey,
     ) -> Result<()> {
@@ -1752,7 +1780,7 @@ impl Mifare {
     }
 
     /// Sets the ATS (Answer To Select) string for the tag
-    pub fn desfire_set_ats(tag: freefare_sys::FreefareTag, ats: &mut [u8]) -> Result<()> {
+    pub unsafe fn desfire_set_ats(tag: freefare_sys::FreefareTag, ats: &mut [u8]) -> Result<()> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot set ATS."));
         }
@@ -1767,7 +1795,7 @@ impl Mifare {
     }
 
     /// Gets the card UID
-    pub fn desfire_get_card_uid(tag: freefare_sys::FreefareTag) -> Result<String> {
+    pub unsafe fn desfire_get_card_uid(tag: freefare_sys::FreefareTag) -> Result<String> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve card UID."));
         }
@@ -1782,7 +1810,7 @@ impl Mifare {
     }
 
     /// Gets the file IDs on the tag
-    pub fn desfire_get_file_ids(tag: freefare_sys::FreefareTag) -> Result<Vec<u8>> {
+    pub unsafe fn desfire_get_file_ids(tag: freefare_sys::FreefareTag) -> Result<Vec<u8>> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve file IDs."));
         }
@@ -1806,7 +1834,7 @@ impl Mifare {
     }
 
     /// Gets the ISO file IDs on the tag
-    pub fn desfire_get_iso_file_ids(tag: freefare_sys::FreefareTag) -> Result<Vec<u16>> {
+    pub unsafe fn desfire_get_iso_file_ids(tag: freefare_sys::FreefareTag) -> Result<Vec<u16>> {
         if tag.is_null() {
             return Err(Error::new("Tag is null. Cannot retrieve ISO file IDs."));
         }
@@ -1830,7 +1858,7 @@ impl Mifare {
     }
 
     /// Gets the file settings of a file
-    pub fn desfire_get_file_settings(
+    pub unsafe fn desfire_get_file_settings(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
     ) -> Result<freefare_sys::MifareDESFireFileSettings> {
@@ -1853,7 +1881,7 @@ impl Mifare {
     }
 
     /// Changes the settings of a file
-    pub fn desfire_change_file_settings(
+    pub unsafe fn desfire_change_file_settings(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -1880,7 +1908,7 @@ impl Mifare {
     }
 
     /// Creates a standard data file.
-    pub fn desfire_create_std_data_file(
+    pub unsafe fn desfire_create_std_data_file(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -1909,7 +1937,7 @@ impl Mifare {
     }
 
     /// Creates a standard data file with ISO parameters
-    pub fn desfire_create_std_data_file_iso(
+    pub unsafe fn desfire_create_std_data_file_iso(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -1944,7 +1972,7 @@ impl Mifare {
     }
 
     /// Creates a backup data file
-    pub fn desfire_create_backup_data_file(
+    pub unsafe fn desfire_create_backup_data_file(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -1973,7 +2001,7 @@ impl Mifare {
     }
 
     /// Creates a backup data file with ISO parameters
-    pub fn desfire_create_backup_data_file_iso(
+    pub unsafe fn desfire_create_backup_data_file_iso(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -2008,7 +2036,8 @@ impl Mifare {
     }
 
     /// Creates a value file
-    pub fn desfire_create_value_file(
+    #[allow(clippy::too_many_arguments)]
+    pub unsafe fn desfire_create_value_file(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -2043,7 +2072,7 @@ impl Mifare {
     }
 
     /// Creates a linear record file
-    pub fn desfire_create_linear_record_file(
+    pub unsafe fn desfire_create_linear_record_file(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -2074,7 +2103,7 @@ impl Mifare {
     }
 
     /// Creates a cyclic record file with ISO parameters
-    pub fn desfire_create_cyclic_record_file_iso(
+    pub unsafe fn desfire_create_cyclic_record_file_iso(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: u8,
@@ -2111,7 +2140,7 @@ impl Mifare {
     }
 
     /// Reads data from a file with communication settings
-    pub fn desfire_read_data_ex(
+    pub unsafe fn desfire_read_data_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -2148,7 +2177,7 @@ impl Mifare {
     }
 
     /// Writes data to a file with communication settings
-    pub fn desfire_write_data_ex(
+    pub unsafe fn desfire_write_data_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         offset: off_t,
@@ -2187,7 +2216,7 @@ impl Mifare {
     }
 
     /// Gets a value from a file with communication settings
-    pub fn desfire_get_value_ex(
+    pub unsafe fn desfire_get_value_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         communication_settings: ::std::os::raw::c_int,
@@ -2217,7 +2246,7 @@ impl Mifare {
     }
 
     /// Credits an amount to a file with communication settings
-    pub fn desfire_credit_ex(
+    pub unsafe fn desfire_credit_ex(
         tag: freefare_sys::FreefareTag,
         file_no: u8,
         amount: i32,

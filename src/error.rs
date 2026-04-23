@@ -71,6 +71,12 @@ impl From<&str> for Error {
     }
 }
 
+impl From<nfc::Error> for Error {
+    fn from(value: nfc::Error) -> Self {
+        Self::new(value.to_string())
+    }
+}
+
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.code {

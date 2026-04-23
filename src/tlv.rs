@@ -56,7 +56,7 @@ impl TLV {
     }
 
     /// Appends two TLV objects
-    pub fn append(a: &mut Vec<u8>, b: &mut Vec<u8>) -> Result<Vec<u8>> {
+    pub fn append(a: &[u8], b: &[u8]) -> Result<Vec<u8>> {
         let mut output = Vec::with_capacity(a.len() + b.len());
         output.extend_from_slice(a);
         output.extend_from_slice(b);
@@ -86,12 +86,12 @@ mod tests {
     #[test]
     fn tlv_append_preserves_both_records() {
         let mut first_len = 0;
-        let mut first = TLV::encode(0x01, &[0x10, 0x11], &mut first_len).expect("first encode");
+        let first = TLV::encode(0x01, &[0x10, 0x11], &mut first_len).expect("first encode");
 
         let mut second_len = 0;
-        let mut second = TLV::encode(0x02, &[0x20], &mut second_len).expect("second encode");
+        let second = TLV::encode(0x02, &[0x20], &mut second_len).expect("second encode");
 
-        let appended = TLV::append(&mut first, &mut second).expect("append");
+        let appended = TLV::append(&first, &second).expect("append");
         assert_eq!(appended.len(), first_len + second_len);
         assert_eq!(&appended[..first_len], &first);
         assert_eq!(&appended[first_len..], &second);

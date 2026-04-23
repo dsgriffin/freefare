@@ -1,4 +1,4 @@
-use crate::{Error, Result};
+use crate::{Error, Result, Tag};
 use ::freefare_sys;
 
 /// Owned wrapper around a libfreefare MAD handle.
@@ -10,6 +10,10 @@ pub struct Mad {
 }
 
 impl Mad {
+    pub(crate) fn as_ptr(&self) -> freefare_sys::Mad {
+        self.inner
+    }
+
     /// Creates a new Mad instance from a version
     pub fn new(version: u8) -> Result<Self> {
         let raw_mad = unsafe { freefare_sys::mad_new(version) };
@@ -25,12 +29,8 @@ impl Mad {
     }
 
     /// Reads a MAD from the given tag
-    pub fn read(tag: freefare_sys::FreefareTag) -> Result<Self> {
-        if tag.is_null() {
-            return Err(Error::new("Tag is null. Cannot read MAD."));
-        }
-
-        let raw_mad = unsafe { freefare_sys::mad_read(tag) };
+    pub fn read(tag: &Tag<'_>) -> Result<Self> {
+        let raw_mad = unsafe { freefare_sys::mad_read(tag.as_ptr()) };
 
         if raw_mad.is_null() {
             Err(Error::new("Failed to read MAD from the tag."))
@@ -42,16 +42,18 @@ impl Mad {
     /// Writes a MAD to the given tag using the specified keys
     pub fn write(
         &self,
-        tag: freefare_sys::FreefareTag,
-        key_b_sector_00: *const freefare_sys::MifareClassicKey,
-        key_b_sector_10: *const freefare_sys::MifareClassicKey,
+        tag: &Tag<'_>,
+        key_b_sector_00: &freefare_sys::MifareClassicKey,
+        key_b_sector_10: &freefare_sys::MifareClassicKey,
     ) -> Result<()> {
-        if tag.is_null() {
-            return Err(Error::new("Tag is null. Cannot write MAD."));
-        }
-
-        let result =
-            unsafe { freefare_sys::mad_write(tag, self.inner, key_b_sector_00, key_b_sector_10) };
+        let result = unsafe {
+            freefare_sys::mad_write(
+                tag.as_ptr(),
+                self.inner,
+                key_b_sector_00 as *const _,
+                key_b_sector_10 as *const _,
+            )
+        };
 
         if result < 0 {
             Err(Error::new(format!(
